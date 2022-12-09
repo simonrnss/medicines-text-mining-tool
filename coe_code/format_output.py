@@ -54,14 +54,10 @@ def get_amp_dict() -> dict:
 
     local_logger.info("Loading AMP data.")
     amp_filename = glob.glob(os.path.join(args.xml_files_path, 'f_amp2_*.xml'))[0]
-    with open(
-        amp_filename,
-        'r',
-        encoding='utf-8'
-        ) as file:
+    with open(amp_filename, 'r', encoding='utf-8') as file:
         amp_data = xmltodict.parse(file.read())
 
-    # Use list comprehension to convert list of dictionaries into a single dictionary
+    # Use dictionary comprehension to convert list of dictionaries into a single dictionary
     amp_dict = {d['APID']: d for d in amp_data['ACTUAL_MEDICINAL_PRODUCTS']['AMPS']['AMP']}
 
     return amp_dict
@@ -72,11 +68,8 @@ def get_vmp_dict() -> dict:
     is the VPID and the value is the dictionary of other values. '''
 
     local_logger.info("Loading VMP data.")
-    with open(
-        os.path.join(args.xml_files_path,'f_vmp2_3250822.xml'),
-        'r',
-        encoding='utf-8'
-        ) as file:
+    vmp_filename = glob.glob(os.path.join(args.xml_files_path, 'f_vmp2_*.xml'))[0]
+    with open(vmp_filename, 'r', encoding='utf-8') as file:
         vmp_data = xmltodict.parse(file.read())
 
     # Use list comprehension to convert list of dictionaries into a single dictionary
@@ -90,11 +83,8 @@ def get_vtm_dict() -> dict:
     is the VTMID and the value is the dictionary of other values. '''
 
     local_logger.info("Loading VTM data.")
-    with open(
-        os.path.join(args.xml_files_path, 'f_vtm2_3250822.xml'),
-        'r',
-        encoding='utf-8'
-        ) as file:
+    vtm_filename = glob.glob(os.path.join(args.xml_files_path, 'f_vtm2_*.xml'))[0]
+    with open(vtm_filename, 'r', encoding='utf-8') as file:
         vtm_data = xmltodict.parse(file.read())
 
     # Use list comprehension to convert list of dictionaries into a single dictionary
@@ -123,30 +113,6 @@ def load_and_pivot_input() -> pd.DataFrame:
     return pivoted_results
 
 
-# TODO: DELETE - just to help my understanding of how amp_dict is structured
-# my_amp_dict = get_amp_dict()
-# # e.g. using APID 526311000001106 to get thw dictionary of values for that APID
-# print(my_amp_dict['526311000001106'])
-# # e.g. using APID 526311000001106 to get the VPID
-# print(my_amp_dict['526311000001106']['VPID'])
-
-
-# TODO: DELETE - just to help my understanding of how vmp_dict is structured
-# my_vmp_dict = get_vmp_dict()
-# # e.g. using VPID 40962811000001105 to get the dictionary of values for that VPID
-# print(my_vmp_dict['40962811000001105'])
-# # e.g. using VPID 40962811000001105 to get the VTMID
-# print(my_vmp_dict['40962811000001105']['VTMID'])
-
-
-# TODO: DELETE - just to help my understanding of how vtm_dict is structured
-# my_vtm_dict = get_vtm_dict()
-# # e.g. using VTMID 68088000 to get the dictionary of values for that VTMID
-# print(my_vtm_dict['68088000'])
-# # e.g. using VTMID 68088000 to get the NM
-# print(my_vtm_dict['68088000']['NM'])
-
-
 def get_vmp_from_amp(apid, amp_dict):
     ''' Function to look up the VPID corresponding to an APID '''
 
@@ -154,21 +120,11 @@ def get_vmp_from_amp(apid, amp_dict):
         return amp_dict[apid].get('VPID', np.nan)
 
 
-# TODO: DELETE - just checking get_vmp_from_amp() works with a valid APID
-# test = get_vmp_from_amp('526311000001106', my_amp_dict)
-# print(test)
-
-
 def get_vtm_from_vmp(vpid, vmp_dict):
     ''' Function to look up the VPID and return a VTMID '''
 
     if vpid in vmp_dict:
         return vmp_dict[vpid].get('VTMID', np.nan)
-
-
-# TODO: DELETE - just checking get_vtm_from_vmp() works with a valid VPID
-# test = get_vtm_from_vmp('40962811000001105', my_vmp_dict)
-# print(test)
 
 
 def add_code_description(code, code_dict, d_name):
