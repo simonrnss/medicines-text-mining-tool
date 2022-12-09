@@ -138,7 +138,7 @@ def add_code_description(code, code_dict, d_name):
         return np.nan
 
 
-def add_addiitional_info():
+def add_additional_info():
     ''' Function loads and pivots the input .csv file, loads code dictionaries, loops through the
     codes and adds additional codes where a match is found.  Additional columns are also added to
     the dataframe with code descriptions '''
@@ -190,7 +190,7 @@ def add_addiitional_info():
 def main():
 
     # Run function to add additional info to input dataframe
-    output = add_addiitional_info()
+    output = add_additional_info()
 
     # Write the final dataframe to a new file
     output.to_csv(args.output_file)
