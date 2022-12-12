@@ -118,6 +118,8 @@ def get_vmp_from_amp(apid, amp_dict):
 
     if apid in amp_dict:
         return amp_dict[apid].get('VPID', np.nan)
+    else:
+        return np.nan
 
 
 def get_vtm_from_vmp(vpid, vmp_dict):
@@ -125,6 +127,8 @@ def get_vtm_from_vmp(vpid, vmp_dict):
 
     if vpid in vmp_dict:
         return vmp_dict[vpid].get('VTMID', np.nan)
+    else:
+        return np.nan
 
 
 def add_code_description(code, code_dict, d_name):
